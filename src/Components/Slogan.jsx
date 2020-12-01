@@ -6,7 +6,6 @@ import firebase from "../config/firebase.config";
 import "./css/Slogan.css";
 import Button from "./Button";
 import Login from "./Login";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 class Slogan extends Component {
   constructor(props) {
     super(props);
