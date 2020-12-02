@@ -18,12 +18,12 @@
 }
 .left {
   float: left;
-  clear: right;
+  clear: both;
   background-color: rgb(233, 227, 227);
 }
 .right {
   float: right;
-  clear: left;
+  clear: both;
   background-color: rgb(82, 138, 223);
   color: white;
 }

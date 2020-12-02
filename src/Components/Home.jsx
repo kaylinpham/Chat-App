@@ -13,13 +13,25 @@ class Home extends Component {
     this.state = { people: [], roomID: "", document: [] };
     this.onActive = this.onActive.bind(this);
     this.sentMessage = this.sentMessage.bind(this);
+    this.showMessage = this.showMessage.bind(this);
+  }
+  subscribeConversation(conversationId, callback) {
+    return db
+      .collection("messages")
+      .where("roomID", "==", conversationId)
+      .onSnapshot((snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === "added") {
+            callback();
+          }
+        });
+      });
   }
   componentDidMount() {
     const obj = this;
     let people = [];
     let partner = [];
     let document = [];
-    let box = [];
     let mytyping = [];
     db.collection("chatrooms")
       .orderBy("modifiedDate", "desc")
@@ -65,7 +77,6 @@ class Home extends Component {
                   guest={obj.state.firstPartner ? obj.state.firstPartner : {}}
                 />
               );
-              box.push(<Box owner={obj.props.data} room={this.state.first} />);
               mytyping.push(
                 <MyTyping
                   onInput={obj.sentMessage}
@@ -73,10 +84,10 @@ class Home extends Component {
                   room={this.state.first}
                 />
               );
+              this.showMessage();
               obj.setState({
                 people: people,
                 partner: partner,
-                box: box,
                 mytyping: mytyping,
               });
             }, 0);
@@ -86,7 +97,6 @@ class Home extends Component {
   onActive(room) {
     let partner = [];
     let people = [];
-    let box = [];
     let mytyping = [];
     const obj = this;
     obj.setState({ roomID: room });
@@ -112,9 +122,6 @@ class Home extends Component {
                   }
                 />
               );
-              box.push(
-                <Box owner={obj.props.data} room={this.state.currentRoom} />
-              );
               mytyping.push(
                 <MyTyping
                   onInput={obj.sentMessage}
@@ -130,18 +137,52 @@ class Home extends Component {
                   data={obj.state.document}
                 />
               );
+              this.showMessage();
               obj.setState({
                 partner: partner,
                 people: people,
-                box: box,
                 mytyping: mytyping,
               });
             }, 0);
           });
       });
   }
+  showMessage() {
+    const obj = this;
+    const owner = obj.props.data;
+    const room = obj.state.currentRoom;
+    let conversation = [];
+    let box = [];
+    if (room.ID !== "") {
+      db.collection("messages")
+        .orderBy("date", "asc")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            let message = doc.data();
+            if (message.content !== "" && message.roomID === room.ID) {
+              conversation.push(
+                <div className="message">
+                  <p className={message.sender === owner.ID ? "right" : "left"}>
+                    {message.content}
+                  </p>
+                </div>
+              );
+            }
+          });
+          obj.setState({ conversation: conversation });
+        })
+        .then(() => {
+          box.push(<Box conversation={obj.state.conversation} />);
+          obj.setState({ box: box });
+        });
+    }
+  }
   sentMessage(e) {
     const obj = this;
+    let partner = [];
+    let people = [];
+    let box = [];
     if (e.keyCode === 13 && e.target.value !== "") {
       db.collection("messages")
         .add({
@@ -163,7 +204,29 @@ class Home extends Component {
               });
               setTimeout(() => {
                 e.target.value = "";
-              });
+                partner.push(
+                  <Partner
+                    guest={
+                      obj.state.currentPartner ? obj.state.currentPartner : {}
+                    }
+                  />
+                );
+                people.push(
+                  <People
+                    roomID={obj.state.roomID}
+                    onActive={obj.onActive}
+                    owner={obj.props.data}
+                    data={obj.state.document}
+                  />
+                );
+                this.subscribeConversation(obj.state.currentRoom.ID, () => {
+                  this.onActive(obj.state.currentRoom.ID);
+                });
+                obj.setState({ partner: partner, people: people });
+                obj.subscribeConversation(obj.state.roomID, (data) => {
+                  console.log(data);
+                });
+              }, 0);
             });
         });
     }
