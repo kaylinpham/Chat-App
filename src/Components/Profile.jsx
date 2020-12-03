@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Avatar from "./Avatar";
 import "./css/Profile.css";
+import { imageExists } from "./Avatar";
 const Profile = (props) => {
   return (
     <div className="profile">
@@ -8,7 +9,7 @@ const Profile = (props) => {
         <img
           id="profile__img"
           src={
-            props.data.Avatar
+            imageExists(props.data.Avatar)
               ? props.data.Avatar
               : "https://www.pphfoundation.ca/wp-content/uploads/2018/05/default-avatar.png"
           }
@@ -18,7 +19,13 @@ const Profile = (props) => {
       <span>
         <h2>Chat</h2>
       </span>
-      <img id="logout_icon" src="./logout.png" />
+      <img
+        onClick={() => {
+          window.location.reload();
+        }}
+        id="logout_icon"
+        src="./logout.png"
+      />
     </div>
   );
 };

@@ -58,40 +58,41 @@ class Home extends Component {
           obj.props.data.ID === obj.state.first.user1
             ? obj.state.first.user2
             : obj.state.first.user1;
-        db.collection("users")
-          .doc(objectID)
-          .get()
-          .then((doc) => {
-            obj.setState({ firstPartner: doc.data() });
-            setTimeout(() => {
-              people.push(
-                <People
-                  roomID={obj.state.roomID}
-                  onActive={obj.onActive}
-                  owner={obj.props.data}
-                  data={document}
-                />
-              );
-              partner.push(
-                <Partner
-                  guest={obj.state.firstPartner ? obj.state.firstPartner : {}}
-                />
-              );
-              mytyping.push(
-                <MyTyping
-                  onInput={obj.sentMessage}
-                  owner={obj.props.data}
-                  room={this.state.first}
-                />
-              );
-              this.showMessage();
-              obj.setState({
-                people: people,
-                partner: partner,
-                mytyping: mytyping,
-              });
-            }, 0);
-          });
+        obj.onActive(obj.state.currentRoom.ID);
+        // db.collection("users")
+        //   .doc(objectID)
+        //   .get()
+        //   .then((doc) => {
+        //     obj.setState({ firstPartner: doc.data() });
+        //     setTimeout(() => {
+        //       people.push(
+        //         <People
+        //           roomID={obj.state.roomID}
+        //           onActive={obj.onActive}
+        //           owner={obj.props.data}
+        //           data={document}
+        //         />
+        //       );
+        //       partner.push(
+        //         <Partner
+        //           guest={obj.state.firstPartner ? obj.state.firstPartner : {}}
+        //         />
+        //       );
+        //       mytyping.push(
+        //         <MyTyping
+        //           onInput={obj.sentMessage}
+        //           owner={obj.props.data}
+        //           room={this.state.first}
+        //         />
+        //       );
+        //       this.showMessage();
+        //       obj.setState({
+        //         people: people,
+        //         partner: partner,
+        //         mytyping: mytyping,
+        //       });
+        //     }, 0);
+        //   });
       });
   }
   onActive(room) {
@@ -223,9 +224,6 @@ class Home extends Component {
                   this.onActive(obj.state.currentRoom.ID);
                 });
                 obj.setState({ partner: partner, people: people });
-                obj.subscribeConversation(obj.state.roomID, (data) => {
-                  console.log(data);
-                });
               }, 0);
             });
         });
