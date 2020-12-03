@@ -29,10 +29,7 @@ class Home extends Component {
   }
   componentDidMount() {
     const obj = this;
-    let people = [];
-    let partner = [];
     let document = [];
-    let mytyping = [];
     db.collection("chatrooms")
       .orderBy("modifiedDate", "desc")
       .get()
@@ -54,45 +51,7 @@ class Home extends Component {
         });
       })
       .then(() => {
-        let objectID =
-          obj.props.data.ID === obj.state.first.user1
-            ? obj.state.first.user2
-            : obj.state.first.user1;
         obj.onActive(obj.state.currentRoom.ID);
-        // db.collection("users")
-        //   .doc(objectID)
-        //   .get()
-        //   .then((doc) => {
-        //     obj.setState({ firstPartner: doc.data() });
-        //     setTimeout(() => {
-        //       people.push(
-        //         <People
-        //           roomID={obj.state.roomID}
-        //           onActive={obj.onActive}
-        //           owner={obj.props.data}
-        //           data={document}
-        //         />
-        //       );
-        //       partner.push(
-        //         <Partner
-        //           guest={obj.state.firstPartner ? obj.state.firstPartner : {}}
-        //         />
-        //       );
-        //       mytyping.push(
-        //         <MyTyping
-        //           onInput={obj.sentMessage}
-        //           owner={obj.props.data}
-        //           room={this.state.first}
-        //         />
-        //       );
-        //       this.showMessage();
-        //       obj.setState({
-        //         people: people,
-        //         partner: partner,
-        //         mytyping: mytyping,
-        //       });
-        //     }, 0);
-        //   });
       });
   }
   onActive(room) {
@@ -171,10 +130,9 @@ class Home extends Component {
               );
             }
           });
-          obj.setState({ conversation: conversation });
         })
         .then(() => {
-          box.push(<Box conversation={obj.state.conversation} />);
+          box.push(<Box conversation={conversation} />);
           obj.setState({ box: box });
         });
     }
@@ -220,10 +178,12 @@ class Home extends Component {
                     data={obj.state.document}
                   />
                 );
-                this.subscribeConversation(obj.state.currentRoom.ID, () => {
-                  this.onActive(obj.state.currentRoom.ID);
-                });
-                obj.setState({ partner: partner, people: people });
+                setTimeout(() => {
+                  obj.subscribeConversation(obj.state.currentRoom.ID, () => {
+                    obj.onActive(obj.state.currentRoom.ID);
+                    obj.setState({ partner: partner, people: people });
+                  });
+                }, 0);
               }, 0);
             });
         });
