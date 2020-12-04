@@ -20,7 +20,7 @@ export function getMessagesOf(conversationID) {
     .then((docs) => {
       docs.forEach((doc) => {
         let data = doc.data();
-        if (data.ID === conversationID) {
+        if (data.roomID === conversationID) {
           messages.push(data);
         }
       });
@@ -48,7 +48,7 @@ export function getUser(userID) {
     .doc(userID)
     .get()
     .then((doc) => {
-      return doc.data;
+      return doc.data();
     });
 }
 export function getChatroom(conversationID) {

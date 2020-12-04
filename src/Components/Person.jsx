@@ -35,7 +35,11 @@ class Person extends Component {
         className={this.props.className}
       >
         <Avatar url={this.state.data.Avatar} />
-        <Quickview room={this.props.private} data={this.state.data} />
+        <Quickview
+          owner={this.props.owner}
+          room={this.props.private}
+          data={this.state.data}
+        />
       </div>
     );
   }

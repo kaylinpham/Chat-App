@@ -7,6 +7,7 @@ import People from "./People";
 import Search from "./Search";
 import Profile from "./Profile";
 import { db } from "../App";
+import * as f from "../Controllers";
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -30,34 +31,23 @@ class Home extends Component {
   componentDidMount() {
     const obj = this;
     let document = [];
-    db.collection("chatrooms")
-      .orderBy("modifiedDate", "desc")
-      .get()
-      .then(function (querySnapshot) {
-        querySnapshot.forEach((doc) => {
-          let data = doc.data();
-          if (
-            data.user1 === obj.props.data.ID ||
-            data.user2 === obj.props.data.ID
-          ) {
-            document.push(data);
-          }
-        });
+    f.getChatrooms(obj.props.data.ID)
+      .then((res) => {
+        document = res;
         obj.setState({
-          roomID: document[0].ID ? document[0].ID : "",
+          roomID: document[0].ID,
           document: document,
           first: document[0],
           currentRoom: document[0],
         });
       })
       .then(() => {
-        obj.onActive(obj.state.currentRoom.ID);
+        obj.subscribeConversation(obj.state.currentRoom.ID, () => {
+          obj.onActive(obj.state.currentRoom.ID);
+        });
       });
   }
   onActive(room) {
-    let partner = [];
-    let people = [];
-    let mytyping = [];
     const obj = this;
     obj.setState({ roomID: room });
     db.collection("chatrooms")
@@ -75,46 +65,19 @@ class Home extends Component {
           .then((value) => {
             obj.setState({ currentPartner: value.data() });
             setTimeout(() => {
-              partner.push(
-                <Partner
-                  guest={
-                    obj.state.currentPartner ? obj.state.currentPartner : {}
-                  }
-                />
-              );
-              mytyping.push(
-                <MyTyping
-                  onInput={obj.sentMessage}
-                  owner={obj.props.data}
-                  room={this.state.currentRoom}
-                />
-              );
-              people.push(
-                <People
-                  roomID={obj.state.roomID}
-                  onActive={obj.onActive}
-                  owner={obj.props.data}
-                  data={obj.state.document}
-                />
-              );
               this.showMessage();
-              obj.setState({
-                partner: partner,
-                people: people,
-                mytyping: mytyping,
-              });
             }, 0);
           });
       });
   }
-  showMessage() {
+  async showMessage() {
     const obj = this;
     const owner = obj.props.data;
     const room = obj.state.currentRoom;
     let conversation = [];
-    let box = [];
     if (room.ID !== "") {
-      db.collection("messages")
+      await db
+        .collection("messages")
         .orderBy("date", "asc")
         .get()
         .then((querySnapshot) => {
@@ -130,18 +93,12 @@ class Home extends Component {
               );
             }
           });
-        })
-        .then(() => {
-          box.push(<Box conversation={conversation} />);
-          obj.setState({ box: box });
         });
+      obj.setState({ conversation: conversation });
     }
   }
   sentMessage(e) {
     const obj = this;
-    let partner = [];
-    let people = [];
-    let box = [];
     if (e.keyCode === 13 && e.target.value !== "") {
       db.collection("messages")
         .add({
@@ -163,25 +120,9 @@ class Home extends Component {
               });
               setTimeout(() => {
                 e.target.value = "";
-                partner.push(
-                  <Partner
-                    guest={
-                      obj.state.currentPartner ? obj.state.currentPartner : {}
-                    }
-                  />
-                );
-                people.push(
-                  <People
-                    roomID={obj.state.roomID}
-                    onActive={obj.onActive}
-                    owner={obj.props.data}
-                    data={obj.state.document}
-                  />
-                );
                 setTimeout(() => {
                   obj.subscribeConversation(obj.state.currentRoom.ID, () => {
                     obj.onActive(obj.state.currentRoom.ID);
-                    obj.setState({ partner: partner, people: people });
                   });
                 }, 0);
               }, 0);
@@ -196,12 +137,23 @@ class Home extends Component {
         <div className="contacts">
           <Profile data={data} />
           <Search />
-          {this.state.people}
+          <People
+            roomID={this.state.roomID}
+            onActive={this.onActive}
+            owner={this.props.data}
+            data={this.state.document}
+          />
         </div>
         <div className="individual">
-          {this.state.partner}
-          {this.state.box}
-          {this.state.mytyping}
+          <Partner
+            guest={this.state.currentPartner ? this.state.currentPartner : {}}
+          />
+          <Box conversation={this.state.conversation} />
+          <MyTyping
+            onInput={this.sentMessage}
+            owner={this.props.data}
+            room={this.state.currentRoom}
+          />
         </div>
       </div>
     );
