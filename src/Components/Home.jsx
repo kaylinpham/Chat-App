@@ -95,6 +95,8 @@ class Home extends Component {
           });
         });
       obj.setState({ conversation: conversation });
+      let el = document.getElementById("conversation");
+      el.scrollTop = el.scrollHeight;
     }
   }
   sentMessage(e) {
