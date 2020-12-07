@@ -31,6 +31,7 @@ class Home extends Component {
   componentDidMount() {
     const obj = this;
     let document = [];
+    // console.log(this.showMessage());
     f.getChatrooms(obj.props.data.ID)
       .then((res) => {
         document = res;
@@ -47,53 +48,46 @@ class Home extends Component {
         });
       });
   }
-  onActive(room) {
-    const obj = this;
-    obj.setState({ roomID: room });
-    db.collection("chatrooms")
-      .doc(room)
-      .get()
-      .then((doc) => {
-        obj.setState({ currentRoom: doc.data() });
-        const partnerID =
-          obj.state.currentRoom.user1 === obj.props.data.ID
-            ? obj.state.currentRoom.user2
-            : obj.state.currentRoom.user1;
-        db.collection("users")
-          .doc(partnerID)
-          .get()
-          .then((value) => {
-            obj.setState({ currentPartner: value.data() });
-            setTimeout(() => {
-              this.showMessage();
-            }, 0);
-          });
-      });
-  }
-  async showMessage() {
+  async onActive(room) {
     const obj = this;
     const owner = obj.props.data;
-    const room = obj.state.currentRoom;
+    let partnerID = "";
+    await f.getChatroom(room).then((res) => {
+      partnerID = res.user1 === owner.ID ? res.user2 : res.user1;
+      obj.showMessage(res, owner);
+      obj.showPartner(partnerID);
+      obj.setState({ roomID: room, currentRoom: res });
+    });
+  }
+  async showPartner(partnerID) {
+    const obj = this;
+    await f.getUser(partnerID).then((res) => {
+      obj.setState({ currentPartner: res });
+    });
+  }
+  async showPeople(owner) {
+    const obj = this;
+    await f.getChatrooms(owner).then((res) => {
+      obj.setState({ document: res });
+    });
+  }
+  async showMessage(room, owner) {
+    const obj = this;
     let conversation = [];
     if (room.ID !== "") {
-      await db
-        .collection("messages")
-        .orderBy("date", "asc")
-        .get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            let message = doc.data();
-            if (message.content !== "" && message.roomID === room.ID) {
-              conversation.push(
-                <div className="message">
-                  <p className={message.sender === owner.ID ? "right" : "left"}>
-                    {message.content}
-                  </p>
-                </div>
-              );
-            }
-          });
+      await f.getMessagesOf(room.ID).then((docs) => {
+        docs.forEach((message) => {
+          if (message.roomID === room.ID) {
+            conversation.push(
+              <div className="message">
+                <p className={message.sender === owner.ID ? "right" : "left"}>
+                  {message.content}
+                </p>
+              </div>
+            );
+          }
         });
+      });
       obj.setState({ conversation: conversation });
       let el = document.getElementById("conversation");
       el.scrollTop = el.scrollHeight;
@@ -125,6 +119,7 @@ class Home extends Component {
                 setTimeout(() => {
                   obj.subscribeConversation(obj.state.currentRoom.ID, () => {
                     obj.onActive(obj.state.currentRoom.ID);
+                    obj.showPeople(obj.props.data.ID);
                   });
                 }, 0);
               }, 0);

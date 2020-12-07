@@ -3,6 +3,7 @@ import Avatar from "./Avatar";
 import "./css/Person.css";
 import Quickview from "./Quickview";
 import { db } from "../App";
+let reRender = 0;
 class Person extends Component {
   constructor(props) {
     super(props);
@@ -22,12 +23,29 @@ class Person extends Component {
         obj.setState({ data: doc.data() });
       });
   }
+  componentDidUpdate() {
+    if (reRender === 0) {
+      const obj = this;
+      const owner = obj.props.owner;
+      const partner = obj.props.private;
+      const partnerID =
+        partner.user1 === owner.ID ? partner.user2 : partner.user1;
+      db.collection("users")
+        .doc(partnerID)
+        .get()
+        .then((doc) => {
+          obj.setState({ data: doc.data() });
+        });
+    }
+    reRender = 1;
+  }
   handle(e) {
     {
       this.props.onActive(e.currentTarget.id);
     }
   }
   render() {
+    reRender = 0;
     return (
       <div
         onClick={this.handle}
