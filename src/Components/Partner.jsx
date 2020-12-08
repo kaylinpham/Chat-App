@@ -18,7 +18,6 @@ const Partner = (props) => {
         <p>
           <b>{props.guest.Fullname}</b>
         </p>
-        <span>Hoạt động 1 giờ trước</span>
       </div>
     </div>
   );

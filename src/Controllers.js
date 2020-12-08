@@ -60,3 +60,15 @@ export function getChatroom(conversationID) {
       return doc.data();
     });
 }
+export function subscribeConversation(conversationId, callback) {
+  return db
+    .collection("messages")
+    .where("roomID", "==", conversationId)
+    .onSnapshot((snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === "added") {
+          callback();
+        }
+      });
+    });
+}
