@@ -11,16 +11,17 @@ class MyTyping extends Component {
     e.preventDefault();
     const obj = this;
     let date = new Date();
-    if ((e.keyCode === 13) & (e.target.value1 !== "")) {
+    let value = e.target.value;
+    if ((e.keyCode === 13) & (value !== "")) {
+      e.target.value = "";
       db.collection("messages")
         .add({
-          content: e.target.value,
+          content: value,
           date: date,
           roomID: obj.props.roomID,
           sender: obj.props.owner.ID,
         })
         .then((doc) => {
-          e.target.value = "";
           doc.update({
             ID: doc.id,
           });

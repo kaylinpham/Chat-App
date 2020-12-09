@@ -6,6 +6,8 @@ import firebase from "../config/firebase.config";
 import "./css/Form.css";
 import Button from "./Button";
 import Input from "./Input";
+import Facebook from "./Facebook";
+import { db } from "../App";
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -22,6 +24,7 @@ class Login extends Component {
       })
       .catch((err) => console.log(err));
   }
+
   render() {
     return (
       <div className={this.props.status}>
@@ -50,6 +53,7 @@ class Login extends Component {
             <Button onClick={this.props.onLogin} className="btn">
               Login
             </Button>
+            <Facebook callback={this.props.onFB} />
             <br />
             <p>
               You don't have any account?{" "}
