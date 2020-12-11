@@ -51,7 +51,7 @@ class Home extends Component {
       <div className="home">
         <div className="contacts">
           <Profile data={data} />
-          <Search />
+          {/* <Search /> */}
           <People
             roomID={this.state.roomID}
             onActive={this.onActive}
