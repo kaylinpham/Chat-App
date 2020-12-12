@@ -8,23 +8,23 @@ class Quickview extends Component {
     this.state = {};
   }
   componentDidMount() {
-    let message = [];
-    const obj = this;
-    f.getMessagesOf(this.props.room.ID).then((res) => {
-      message = res;
-      obj.setState({ message: message });
-    });
+    // let message = [];
+    // const obj = this;
+    // f.getMessagesOf(this.props.room.ID).then((res) => {
+    //   message = res;
+    //   obj.setState({ message: message });
+    // });
   }
   componentDidUpdate() {
-    if (reRender === 0) {
-      let message = [];
-      const obj = this;
-      f.getMessagesOf(this.props.room.ID).then((res) => {
-        message = res;
-        obj.setState({ message: message });
-      });
-      reRender = 1;
-    }
+    // if (reRender === 0) {
+    //   let message = [];
+    //   const obj = this;
+    //   f.getMessagesOf(this.props.room.ID).then((res) => {
+    //     message = res;
+    //     obj.setState({ message: message });
+    //   });
+    //   reRender = 1;
+    // }
   }
   render() {
     let messages = this.state.message ? this.state.message : [];

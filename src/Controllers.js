@@ -16,7 +16,7 @@ export function getMessagesOf(conversationID) {
   return db
     .collection("messages")
     .orderBy("date")
-    .get()
+    .onSnapshot()
     .then((docs) => {
       docs.forEach((doc) => {
         let data = doc.data();
@@ -67,7 +67,7 @@ export function subscribeConversation(conversationId, callback) {
     .onSnapshot((snapshot) => {
       snapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
-          callback();
+          callback(change.doc.data());
         }
       });
     });

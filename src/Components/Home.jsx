@@ -29,7 +29,6 @@ class Home extends Component {
     console.log(owner)
     const obj = this;
     f.getChatrooms(owner.ID).then((res) => {
-      console.log(res)
       obj.setState({ document: res, roomID: res[0].ID });
       obj.onActive(res[0].ID);
     });

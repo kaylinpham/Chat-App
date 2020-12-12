@@ -45,14 +45,14 @@ class MyTyping extends Component {
     // console.log(this.state.value)
 
     //
-    // if ((e.keyCode === 13) & (value !== "")) {
-    if ((e.keyCode === 13) & (this.state.value !== "")) {
+    if ((e.keyCode === 13) & (value !== "")) {
+    // if ((e.keyCode === 13) & (this.state.value !== "")) {
       console.log(this.state.value)
       // e.target.value = ""; 
       db.collection("messages")
         .add({
-          // content: value,
-          content: this.state.value,
+          content: value,
+          // content: this.state.value,
           date: date,
           roomID: obj.props.roomID,
           sender: obj.props.owner.ID,
@@ -67,12 +67,12 @@ class MyTyping extends Component {
         .update({
           modifiedDate: date,
         })
-        .then(() => {
-          f.subscribeConversation(obj.props.roomID, () => {
-            obj.props.onActive(obj.props.roomID);
-            obj.props.showPeople();
-          });
-        });
+        // .then(() => {
+        //   f.subscribeConversation(obj.props.roomID, () => {
+        //     obj.props.onActive(obj.props.roomID);
+        //     obj.props.showPeople();
+        //   });
+        // });
     }
   }
 
