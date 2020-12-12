@@ -2,11 +2,30 @@ import React, { Component } from "react";
 import "./css/MyTyping.css";
 import { db } from "../App";
 import * as f from "../Controllers";
+import { Picker } from "emoji-mart";
+import "emoji-mart/css/emoji-mart.css";
 class MyTyping extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      value: "",
+      showEmoji: false,
+    };
     this.sendMessage = this.sendMessage.bind(this);
   }
+  handleChange = (e) => {
+    this.setState({ value: e.target.value });
+  };
+  showEmoji = () => {
+    this.setState({ showEmoji: !this.state.showEmoji });
+  };
+  addEmoji = (e) => {
+    let emoji = e.native;
+    let currentValue = this.state.value;
+    this.setState({
+      value: currentValue + emoji,
+    });
+  };
   sendMessage(e) {
     e.preventDefault();
     let messages = this.props.messages;
@@ -14,7 +33,7 @@ class MyTyping extends Component {
     let date = new Date();
     let value = e.target.value;
     if ((e.keyCode === 13) & (value !== "")) {
-      e.target.value = "";
+      // e.target.value = "";
       db.collection("messages")
         .add({
           content: value,
@@ -46,6 +65,7 @@ class MyTyping extends Component {
             obj.props.showPeople();
           });
         });
+      this.setState({ value: "" });
       var sfDocRef = db.collection("chatrooms").doc(obj.props.roomID);
       return db.runTransaction(function (transaction) {
         return transaction.get(sfDocRef).then(function (sfDoc) {
@@ -62,10 +82,14 @@ class MyTyping extends Component {
     return (
       <div className="typing__area">
         <input
+          onChange={this.handleChange}
           onKeyUp={this.sendMessage}
           type="text"
           placeholder="Nhập tin nhắn..."
+          value={this.state.value}
         />
+        <span onClick={this.showEmoji}>{"😎"}</span>
+        {this.state.showEmoji ? <Picker onSelect={this.addEmoji} /> : null}
       </div>
     );
   }

@@ -17,3 +17,7 @@
   outline: none;
   margin: 1rem auto;
 }
+.typing__area span{
+  font-size: 2rem;
+  padding-right: 1.5rem;
+}
