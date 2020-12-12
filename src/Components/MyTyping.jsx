@@ -9,6 +9,7 @@ class MyTyping extends Component {
   }
   sendMessage(e) {
     e.preventDefault();
+    let messages = this.props.messages;
     const obj = this;
     let date = new Date();
     let value = e.target.value;
@@ -25,6 +26,14 @@ class MyTyping extends Component {
           doc.update({
             ID: doc.id,
           });
+          let mes = {
+            content: value,
+            date: date,
+            sender: obj.props.owner.ID,
+            roomID: obj.props.roomID,
+            ID: doc.id,
+          };
+          messages.push(mes);
         });
       db.collection("chatrooms")
         .doc(obj.props.roomID)
@@ -37,6 +46,16 @@ class MyTyping extends Component {
             obj.props.showPeople();
           });
         });
+      var sfDocRef = db.collection("chatrooms").doc(obj.props.roomID);
+      return db.runTransaction(function (transaction) {
+        return transaction.get(sfDocRef).then(function (sfDoc) {
+          if (!sfDoc.exists) {
+            throw "Document does not exist!";
+          }
+          var newMessages = messages;
+          transaction.update(sfDocRef, { message: newMessages });
+        });
+      });
     }
   }
   render() {

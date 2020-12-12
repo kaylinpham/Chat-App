@@ -3,41 +3,10 @@ import Avatar from "./Avatar";
 import "./css/Person.css";
 import Quickview from "./Quickview";
 import { db } from "../App";
-let reRender = 0;
 class Person extends Component {
   constructor(props) {
     super(props);
-    this.state = { data: {} };
     this.handle = this.handle.bind(this);
-  }
-  componentDidMount() {
-    const obj = this;
-    const owner = obj.props.owner;
-    const partner = obj.props.private;
-    const partnerID =
-      partner.user1 === owner.ID ? partner.user2 : partner.user1;
-    db.collection("users")
-      .doc(partnerID)
-      .get()
-      .then((doc) => {
-        obj.setState({ data: doc.data() });
-      });
-  }
-  componentDidUpdate() {
-    if (reRender === 0) {
-      const obj = this;
-      const owner = obj.props.owner;
-      const partner = obj.props.private;
-      const partnerID =
-        partner.user1 === owner.ID ? partner.user2 : partner.user1;
-      db.collection("users")
-        .doc(partnerID)
-        .get()
-        .then((doc) => {
-          obj.setState({ data: doc.data() });
-        });
-    }
-    reRender = 1;
   }
   handle(e) {
     {
@@ -45,18 +14,19 @@ class Person extends Component {
     }
   }
   render() {
-    reRender = 0;
+    const data = this.props.friend;
     return (
       <div
         onClick={this.handle}
-        id={this.props.private.ID}
+        id={this.props.room.ID}
         className={this.props.className}
       >
-        <Avatar url={this.state.data.Avatar} />
+        <Avatar url={data.Avatar} />
         <Quickview
           owner={this.props.owner}
-          room={this.props.private}
-          data={this.state.data}
+          data={data}
+          room={this.props.room}
+          message={this.props.lastMessage ? this.props.lastMessage : {}}
         />
       </div>
     );

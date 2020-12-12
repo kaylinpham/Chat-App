@@ -25,6 +25,9 @@ class App extends Component {
     this.collectInfor = this.collectInfor.bind(this);
     this.responseFacebook = this.responseFacebook.bind(this);
   }
+  componentDidMount() {
+    
+  }
   toggleLoginForm() {
     this.setState({ loginState: !this.state.loginState });
   }
@@ -37,7 +40,6 @@ class App extends Component {
     this.setState({ [e.target.name]: value });
   }
   responseFacebook(response) {
-    // console.log(response);
     const obj = this;
     obj.setState({ email: response.email });
     if (response.status !== "unknown" && response) {
@@ -127,6 +129,11 @@ class App extends Component {
       .then(function (querySnapshot) {
         if (!querySnapshot.empty) {
           let data = querySnapshot.docs[0].data();
+          const owner = {
+            username: data.Username,
+            ID: data.ID,
+          };
+          window.localStorage.setItem("user", JSON.stringify(owner));
           home.push(<Home data={data} />);
           obj.setState({
             home: home,

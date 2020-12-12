@@ -1,8 +1,9 @@
 import { db } from "./App";
-export function getUsers() {
+export function getUsers(ownerID) {
   let users = [];
   return db
     .collection("users")
+    .where("ID", "!=", ownerID)
     .get()
     .then((docs) => {
       docs.forEach((doc) => {
@@ -71,4 +72,23 @@ export function subscribeConversation(conversationId, callback) {
         }
       });
     });
+}
+export async function getLastMessages(rooms) {
+  let lastMessages = [];
+  await rooms.map((room) => {
+    let count = 0;
+    db.collection("messages")
+      .orderBy("date", "desc")
+      .get()
+      .then((docs) => {
+        docs.forEach((doc) => {
+          let mes = doc.data();
+          if (mes.roomID === room.ID && count !== 1) {
+            lastMessages.push(mes);
+            count++;
+          }
+        });
+      });
+  });
+  return lastMessages;
 }
