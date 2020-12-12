@@ -8,17 +8,28 @@ import Search from "./Search";
 import Profile from "./Profile";
 import { db } from "../App";
 import * as f from "../Controllers";
+
+import {Picker} from 'emoji-mart'
+import 'emoji-mart/css/emoji-mart.css'
+
 class Home extends Component {
   constructor(props) {
     super(props);
-    this.state = { roomID: "", document: [] };
+    this.state = { 
+      roomID: "", 
+      document: [],
+      // thêm value
+      value:"", 
+    }; 
     this.onActive = this.onActive.bind(this);
     this.setDocument = this.setDocument.bind(this);
   }
   componentDidMount() {
     const owner = this.props.data;
+    console.log(owner)
     const obj = this;
     f.getChatrooms(owner.ID).then((res) => {
+      console.log(res)
       obj.setState({ document: res, roomID: res[0].ID });
       obj.onActive(res[0].ID);
     });
@@ -45,6 +56,18 @@ class Home extends Component {
       obj.setState({ document: res });
     });
   }
+
+  // showEmoji = () => {
+  //   this.setState({showEmoji: !this.state.showEmoji})
+  // }
+  // addEmoji = (e) => {
+  //   console.log("emoji clicked")
+  //   let emoji = e.native;
+  //   this.setState({
+  //     value: this.state.value + emoji
+  //   });
+  // }
+
   render() {
     const data = this.props.data;
     return (
@@ -68,8 +91,12 @@ class Home extends Component {
             onActive={this.onActive}
             owner={data}
             roomID={this.state.roomID}
+            // thêm
+            // showEmoji={this.showEmoji}
+            // addEmoji={this.addEmoji}
           />
         </div>
+        {/* {this.state.showEmoji ? <Picker onSelect={this.addEmoji}/> : null} */}
       </div>
     );
   }

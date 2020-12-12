@@ -35,7 +35,7 @@ class SignUp extends Component {
   collectInfor(e) {
     e.preventDefault();
     let value = e.target.value;
-    this.setState({ [e.target.name]: value });
+    this.setState({ [e.target.name]: value }); 
   }
   checkFormat() {
     if (
