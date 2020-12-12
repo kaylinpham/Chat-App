@@ -26,11 +26,10 @@ class MyTyping extends Component {
     this.setState({ showEmoji: !this.state.showEmoji })
   }
   addEmoji = (e) => {
-    console.log("emoji clicked")
     let emoji = e.native;
+    let currentValue = this.state.value;
     this.setState({
-      // value: this.state.value + emoji
-      value: 'emoji clicked' + emoji
+      value: currentValue + emoji
     });
   }
   //
@@ -39,16 +38,11 @@ class MyTyping extends Component {
     e.preventDefault();
     const obj = this;
     let date = new Date();
-    let value = e.target.value; // code of Giang
-    // thêm emoji
-    // let value = this.state.value
-    // console.log(this.state.value)
+    let value =  e.target.value // code of Giang
 
-    //
+    this.setState({value: value})
     if ((e.keyCode === 13) & (value !== "")) {
-    // if ((e.keyCode === 13) & (this.state.value !== "")) {
-      console.log(this.state.value)
-      // e.target.value = ""; 
+     
       db.collection("messages")
         .add({
           content: value,
@@ -73,6 +67,8 @@ class MyTyping extends Component {
         //     obj.props.showPeople();
         //   });
         // });
+    this.setState({value: ""})
+
     }
   }
 
@@ -85,6 +81,7 @@ class MyTyping extends Component {
           // onSubmit={this.sendMessage}
           type="text"
           placeholder="Nhập tin nhắn..."
+          value={this.state.value}
         />
         <span onClick={this.showEmoji}>{'😎'}</span>
         {this.state.showEmoji ? <Picker onSelect={this.addEmoji} /> : null}
