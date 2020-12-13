@@ -88,8 +88,10 @@ class MyTyping extends Component {
           placeholder="Nhập tin nhắn..."
           value={this.state.value}
         />
-        <span onClick={this.showEmoji}>{"😎"}</span>
-        {this.state.showEmoji ? <Picker onSelect={this.addEmoji} /> : null}
+        <span id="sympol" onClick={this.showEmoji}>{"😎"}</span>
+        <div className="emoji">
+          {this.state.showEmoji ? <Picker onSelect={this.addEmoji} /> : null}
+        </div>
       </div>
     );
   }

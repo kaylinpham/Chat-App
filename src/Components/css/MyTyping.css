@@ -17,7 +17,13 @@
   outline: none;
   margin: 1rem auto;
 }
-.typing__area span{
+#sympol {
   font-size: 2rem;
   padding-right: 1.5rem;
+}
+.typing__area .emoji {
+  width: 300px !important;
+  position: absolute;
+  bottom: 4rem;
+  right: 3rem;
 }
