@@ -20,7 +20,7 @@ class Home extends Component {
   componentDidMount() {
     const owner = this.props.data;
     const obj = this;
-    console.log(owner);
+    // console.log(owner);
     f.getChatrooms(owner.ID).then((res) => {
       obj.setState({ document: res, roomID: res[0].ID });
       obj.onActive(res[0].ID);
