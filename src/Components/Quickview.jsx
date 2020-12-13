@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "./css/Quickview.css";
 import * as f from "../Controllers";
-let reRender = 0;
 class Quickview extends Component {
   constructor(props) {
     super(props);

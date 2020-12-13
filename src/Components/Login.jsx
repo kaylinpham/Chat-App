@@ -11,19 +11,19 @@ import { db } from "../App";
 class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = { url: "" };
+    // this.state = { url: "" };
   }
-  componentDidMount() {
-    const storageRef = firebase.storage().ref();
-    let spaceRef = "iconfinder_error_1646012.png";
-    storageRef
-      .child(spaceRef)
-      .getDownloadURL()
-      .then((url) => {
-        this.setState({ url: url });
-      })
-      .catch((err) => console.log(err));
-  }
+  // componentDidMount() {
+  //   const storageRef = firebase.storage().ref();
+  //   let spaceRef = "iconfinder_error_1646012.png";
+  //   storageRef
+  //     .child(spaceRef)
+  //     .getDownloadURL()
+  //     .then((url) => {
+  //       this.setState({ url: url });
+  //     })
+  //     .catch((err) => console.log(err));
+  // }
 
   render() {
     return (
@@ -31,7 +31,7 @@ class Login extends Component {
         <img
           onClick={this.props.onExit}
           className="exit"
-          src={this.state.url}
+          src="./iconfinder_error_1646012.png"
         />
         <form className="form__">
           <h2>Login</h2>

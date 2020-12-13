@@ -15,11 +15,12 @@ class Home extends Component {
     this.onActive = this.onActive.bind(this);
     this.setDocument = this.setDocument.bind(this);
     this.showMessage = this.showMessage.bind(this);
-    this.setLastMessages = this.setLastMessages.bind(this);
+    // this.setLastMessages = this.setLastMessages.bind(this);
   }
   componentDidMount() {
     const owner = this.props.data;
     const obj = this;
+    console.log(owner);
     f.getChatrooms(owner.ID).then((res) => {
       obj.setState({ document: res, roomID: res[0].ID });
       obj.onActive(res[0].ID);
@@ -54,11 +55,11 @@ class Home extends Component {
       obj.setState({ document: res });
     });
   }
-  setLastMessages() {
-    f.getLastMessages(this.state.document).then((res) => {
-      this.setState({ lastMessages: res });
-    });
-  }
+  // setLastMessages() {
+  //   f.getLastMessages(this.state.document).then((res) => {
+  //     this.setState({ lastMessages: res });
+  //   });
+  // }
   showMessage() {
     const obj = this;
     const owner = obj.props.data;

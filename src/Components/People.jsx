@@ -4,7 +4,6 @@ import "./css/People.css";
 const People = (props) => {
   const rooms = props.data;
   const friends = props.friends;
-  const lastMessages = props.lastMessages;
   const owner = props.owner;
   let person = [];
   rooms.map((room) => {

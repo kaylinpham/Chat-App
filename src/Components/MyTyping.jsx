@@ -54,17 +54,15 @@ class MyTyping extends Component {
           };
           messages.push(mes);
         });
-      db.collection("chatrooms")
-        .doc(obj.props.roomID)
-        .update({
-          modifiedDate: date,
-        })
-        .then(() => {
-          f.subscribeConversation(obj.props.roomID, () => {
-            obj.props.onActive(obj.props.roomID);
-            obj.props.showPeople();
-          });
-        });
+      db.collection("chatrooms").doc(obj.props.roomID).update({
+        modifiedDate: date,
+      });
+      // .then(() => {
+      //   f.subscribeConversation(obj.props.roomID, () => {
+      //     obj.props.onActive(obj.props.roomID);
+      //     obj.props.showPeople();
+      //   });
+      // });
       this.setState({ value: "" });
       var sfDocRef = db.collection("chatrooms").doc(obj.props.roomID);
       return db.runTransaction(function (transaction) {
@@ -74,6 +72,10 @@ class MyTyping extends Component {
           }
           var newMessages = messages;
           transaction.update(sfDocRef, { message: newMessages });
+          f.subscribeConversation(obj.props.roomID, () => {
+            obj.props.onActive(obj.props.roomID);
+            obj.props.showPeople();
+          });
         });
       });
     }
@@ -88,7 +90,9 @@ class MyTyping extends Component {
           placeholder="Nhập tin nhắn..."
           value={this.state.value}
         />
-        <span id="sympol" onClick={this.showEmoji}>{"😎"}</span>
+        <span id="sympol" onClick={this.showEmoji}>
+          {"😎"}
+        </span>
         <div className="emoji">
           {this.state.showEmoji ? <Picker onSelect={this.addEmoji} /> : null}
         </div>

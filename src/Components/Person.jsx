@@ -26,7 +26,6 @@ class Person extends Component {
           owner={this.props.owner}
           data={data}
           room={this.props.room}
-          message={this.props.lastMessage ? this.props.lastMessage : {}}
         />
       </div>
     );

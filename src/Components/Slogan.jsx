@@ -9,26 +9,26 @@ import Login from "./Login";
 class Slogan extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      url: "",
-    };
+    // this.state = {
+    //   url: "",
+    // };
   }
-  componentDidMount() {
-    const storageRef = firebase.storage().ref();
-    let spaceRef = "austin-distel-DS1hZ4xzD7M-unsplash.jpg";
-    storageRef
-      .child(spaceRef)
-      .getDownloadURL()
-      .then((url) => {
-        this.setState({ url: url });
-      })
-      .catch((err) => console.log(err));
-  }
+  // componentDidMount() {
+  //   const storageRef = firebase.storage().ref();
+  //   let spaceRef = "austin-distel-DS1hZ4xzD7M-unsplash.jpg";
+  //   storageRef
+  //     .child(spaceRef)
+  //     .getDownloadURL()
+  //     .then((url) => {
+  //       this.setState({ url: url });
+  //     })
+  //     .catch((err) => console.log(err));
+  // }
   render() {
     return (
       <div className={this.props.className}>
         <div className="slogan__container">
-          <img src={this.state.url} />
+          <img src="./austin-distel-DS1hZ4xzD7M-unsplash.jpg" />
           <div className="slogan">
             <h1 className="title pdl5__boxbd">Chat App</h1>
             <p className="quote pdl5__boxbd">

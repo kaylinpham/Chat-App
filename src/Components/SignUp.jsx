@@ -21,17 +21,17 @@ class SignUp extends Component {
     this.add = this.add.bind(this);
     this.checkFormat = this.checkFormat.bind(this);
   }
-  componentDidMount() {
-    const storageRef = firebase.storage().ref();
-    let spaceRef = "iconfinder_error_1646012.png";
-    storageRef
-      .child(spaceRef)
-      .getDownloadURL()
-      .then((url) => {
-        this.setState({ url: url });
-      })
-      .catch((err) => console.log(err));
-  }
+  // componentDidMount() {
+  //   const storageRef = firebase.storage().ref();
+  //   let spaceRef = "iconfinder_error_1646012.png";
+  //   storageRef
+  //     .child(spaceRef)
+  //     .getDownloadURL()
+  //     .then((url) => {
+  //       this.setState({ url: url });
+  //     })
+  //     .catch((err) => console.log(err));
+  // }
   collectInfor(e) {
     e.preventDefault();
     let value = e.target.value;
@@ -126,7 +126,7 @@ class SignUp extends Component {
         <img
           onClick={this.props.onExit}
           className="exit"
-          src={this.state.url}
+          src="./iconfinder_error_1646012.png"
         />
         <form className="form__">
           <h2>Sign Up</h2>
