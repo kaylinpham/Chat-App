@@ -18,6 +18,7 @@ class App extends Component {
       signupState: false,
       home: [],
       sloganState: true,
+      logout: true,
     };
     this.toggleLoginForm = this.toggleLoginForm.bind(this);
     this.toggleSignUpForm = this.toggleSignUpForm.bind(this);
@@ -26,7 +27,11 @@ class App extends Component {
     this.responseFacebook = this.responseFacebook.bind(this);
   }
   componentDidMount() {
-    
+    if (window.localStorage.getItem("user")) {
+      this.setState({ logout: false });
+    } else {
+      this.setState({ logout: true });
+    }
   }
   toggleLoginForm() {
     this.setState({ loginState: !this.state.loginState });
@@ -42,7 +47,7 @@ class App extends Component {
   responseFacebook(response) {
     const obj = this;
     obj.setState({ email: response.email });
-    if (response.status !== "unknown" && response) {
+    if (response.status !== "unknown") {
       db.collection("users")
         .where("Email", "==", response.email)
         .get()
@@ -108,6 +113,12 @@ class App extends Component {
       .then(function (querySnapshot) {
         if (!querySnapshot.empty) {
           let data = querySnapshot.docs[0].data();
+          const owner = {
+            username: data.Username,
+            ID: data.ID,
+          };
+          window.localStorage.setItem("user", JSON.stringify(owner));
+          window.localStorage.setItem("data", JSON.stringify(data));
           home.push(<Home data={data} />);
           obj.setState({
             home: home,
@@ -129,6 +140,7 @@ class App extends Component {
       .then(function (querySnapshot) {
         if (!querySnapshot.empty) {
           let data = querySnapshot.docs[0].data();
+          window.localStorage.setItem("data", JSON.stringify(data));
           const owner = {
             username: data.Username,
             ID: data.ID,
@@ -147,40 +159,52 @@ class App extends Component {
       });
   }
   render() {
-    return (
-      <div className="container">
-        <Slogan
-          className={this.state.sloganState ? "" : "none"}
-          onLogin={this.toggleLoginForm}
-          onSignup={this.toggleSignUpForm}
-        />
-        <Login
-          onInput={this.collectInfor}
-          onLogin={this.login}
-          move={() => {
-            this.toggleLoginForm();
-            this.toggleSignUpForm();
-          }}
-          onFB={this.responseFacebook}
-          onExit={this.toggleLoginForm}
-          status={
-            this.state.loginState ? "form__container" : "form__container none"
-          }
-          auth={this.state.auth}
-        />
-        <SignUp
-          move={() => {
-            this.toggleLoginForm();
-            this.toggleSignUpForm();
-          }}
-          onExit={this.toggleSignUpForm}
-          status={
-            this.state.signupState ? "form__container" : "form__container none"
-          }
-        />
-        {this.state.home}
-      </div>
-    );
+    let homePage;
+    this.state.logout
+      ? (homePage = (
+          <>
+            <Slogan
+              className={this.state.sloganState ? "" : "none"}
+              onLogin={this.toggleLoginForm}
+              onSignup={this.toggleSignUpForm}
+            />
+            <Login
+              onInput={this.collectInfor}
+              onLogin={this.login}
+              move={() => {
+                this.toggleLoginForm();
+                this.toggleSignUpForm();
+              }}
+              onFB={this.responseFacebook}
+              onExit={this.toggleLoginForm}
+              status={
+                this.state.loginState
+                  ? "form__container"
+                  : "form__container none"
+              }
+              auth={this.state.auth}
+            />
+            <SignUp
+              move={() => {
+                this.toggleLoginForm();
+                this.toggleSignUpForm();
+              }}
+              onExit={this.toggleSignUpForm}
+              status={
+                this.state.signupState
+                  ? "form__container"
+                  : "form__container none"
+              }
+            />
+            {this.state.home}
+          </>
+        ))
+      : (homePage = (
+          <>
+            <Home data={JSON.parse(window.localStorage.getItem("data"))} />
+          </>
+        ));
+    return <div className="container">{homePage}</div>;
   }
 }
 

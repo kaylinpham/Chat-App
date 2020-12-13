@@ -21,7 +21,11 @@ const Profile = (props) => {
       </span>
       <img
         onClick={() => {
-          window.location.reload();
+          let choose = window.confirm("Do you want to log out?");
+          if (choose) {
+            window.localStorage.clear();
+            window.location.reload();
+          }
         }}
         id="logout_icon"
         src="./logout.png"
