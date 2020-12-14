@@ -19,6 +19,7 @@ class Home extends Component {
   }
   componentDidMount() {
     const owner = this.props.data;
+    console.log(owner)
     const obj = this;
     // console.log(owner);
     f.getChatrooms(owner.ID).then((res) => {

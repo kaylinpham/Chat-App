@@ -14,7 +14,7 @@ const Profile = (props) => {
               : "https://www.pphfoundation.ca/wp-content/uploads/2018/05/default-avatar.png"
           }
         />
-        <p class="img__description">{props.data.Fullname}</p>
+        <p className="img__description">{props.data.Fullname}</p>
       </div>
       <span>
         <h2>Chat</h2>

@@ -4,6 +4,8 @@ import { db } from "../App";
 import * as f from "../Controllers";
 import { Picker } from "emoji-mart";
 import "emoji-mart/css/emoji-mart.css";
+import VideoChat from '../Components/VideoRelated/VideoChat'
+
 class MyTyping extends Component {
   constructor(props) {
     super(props);
@@ -83,6 +85,8 @@ class MyTyping extends Component {
   render() {
     return (
       <div className="typing__area">
+        
+        
         <input
           onChange={this.handleChange}
           onKeyUp={this.sendMessage}
@@ -96,6 +100,7 @@ class MyTyping extends Component {
         <div className="emoji">
           {this.state.showEmoji ? <Picker onSelect={this.addEmoji} /> : null}
         </div>
+        
       </div>
     );
   }

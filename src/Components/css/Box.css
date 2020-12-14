@@ -1,5 +1,5 @@
 .box__chat {
-  height: 84vh;
+  height: 80vh;
   width: 100%;
   overflow: scroll;
   box-sizing: border-box;
@@ -26,4 +26,10 @@
   clear: both;
   background-color: rgb(82, 138, 223);
   color: white;
+}
+
+.VideoChatMain {
+  position: absolute;
+  top: 17px;
+  right: 25px;
 }

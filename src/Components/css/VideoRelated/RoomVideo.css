@@ -1,0 +1,51 @@
+.roomVideo {
+    width: 900px;
+    height: 600px;
+    background-color: lightgrey;
+    border-radius: 20px 0 0 0 ;
+}
+.RoomVideoStatus { 
+    display: flex;
+    justify-content: space-between;
+    height: 30px;
+    border-radius: 20px 0 0 0;
+}
+.EndCall{
+    height: 50px;
+    width: 138px;
+    border-radius: 0 20px 0 20px;
+}
+.RoomVideoMain{ 
+    height: 570px;
+    background-color: lightcyan;
+    position: relative;
+    border-radius: 0 0 0 20px;
+
+}
+
+
+
+.local-participant .participantMainScreen .videoScreenVideo {
+    width: 300px;
+    height: 225px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-radius: 20px 0 0 20px;
+}
+.local-participant .participantMainScreen .participantMainScreenTitle {
+   color: red;
+   position: absolute;
+   bottom: 170px;
+   right: 0;
+   z-index: 100;
+}
+
+.remote-participants .participantMainScreen .videoScreenVideo {
+    position: absolute;
+    height: 570px;
+    bottom: 0;
+    left: 0;
+    border-radius: 0 0 0 20px;
+    background-color: rgb(16, 13, 179);
+}
