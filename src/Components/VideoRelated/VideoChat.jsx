@@ -1,81 +1,104 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from "react";
 
-import Room from './Room';
-import '../css/VideoRelated/VideoChat.css'
-import {db} from '../../App'
+import Room from "./Room";
+import "../css/VideoRelated/VideoChat.css";
+import { db } from "../../App";
 
 const VideoChat = () => {
-  const [userVideoChat, setUserVideoChat] = useState('');
-  const [roomNameVideo, setRoomNameVideo] = useState('');
+  const [userVideoChat, setUserVideoChat] = useState("");
+  const [roomNameVideo, setRoomNameVideo] = useState("");
   const [token, setToken] = useState(null);
 
-  
-  
-    
+  useEffect(() => {
+    let userIDLocal = JSON.parse(window.localStorage.getItem("user")).username;
+    console.log(userIDLocal);
+    setUserVideoChat(userIDLocal);
+  }, []);
 
   const handleSubmit = useCallback(
-    async event => {
-      await setRoomNameVideo("heyfromset")
+    async (event) => {
+      await db
+        .collection("randomRoomId")
+        .add({
+          name: userVideoChat,
+        })
+        .then(function (docRef) {
+          setRoomNameVideo(docRef.id);
+        })
+        .catch(function (error) {
+          console.error("Error adding document: ", error);
+        });
       event.preventDefault();
-      const data = await fetch('/video/token', {
-        method: 'POST',
+      const data = await fetch("/video/token", {
+        method: "POST",
         body: JSON.stringify({
-          identity: "userVideoChat",
-          room: roomNameVideo
+          identity: userVideoChat,
+          room: roomNameVideo,
         }),
         headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(res => res.json());
+          "Content-Type": "application/json",
+        },
+      }).then((res) => res.json());
       setToken(data.token);
     },
     [roomNameVideo, userVideoChat]
   );
 
   const handleSubmit2 = useCallback(
-    async event => {
-      await db.collection("randomRoomId").add({
-        name: userVideoChat
-    })
-    .then(function(docRef) {
-      setRoomNameVideo (docRef.id);
-    })
-    .catch(function(error) {
-        console.error("Error adding document: ", error);
-    });
+    async (event) => {
+      await db
+        .collection("randomRoomId")
+        .add({
+          name: userVideoChat,
+        })
+        .then(function (docRef) {
+          setRoomNameVideo(docRef.id);
+        })
+        .catch(function (error) {
+          console.error("Error adding document: ", error);
+        });
       event.preventDefault();
-      const data = await fetch('/video/token', {
-        method: 'POST',
+      const data = await fetch("/video/token", {
+        method: "POST",
         body: JSON.stringify({
           identity: "fei2",
-          room: roomNameVideo
+          room: "heyfromset",
         }),
         headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(res => res.json());
+          "Content-Type": "application/json",
+        },
+      }).then((res) => res.json());
       setToken(data.token);
     },
     [roomNameVideo, userVideoChat]
   );
 
-  const handleLogout = useCallback(event => {
+  const handleLogout = useCallback((event) => {
     setToken(null);
   }, []);
 
   let render;
   if (token) {
     render = (
-      <Room roomNameVideo={roomNameVideo} token={token} handleLogout={handleLogout} />
+      <Room
+        roomNameVideo={roomNameVideo}
+        token={token}
+        handleLogout={handleLogout}
+      />
     );
   } else {
     render = (
       <div>
-      <button className="callButton" onClick={handleSubmit}>📹</button>
-      <button className="callButton" onClick={handleSubmit2}>test</button>
+        <button className="callButton" onClick={handleSubmit}>
+          📹
+        </button>
+        <button className="callButton" onClick={handleSubmit2}>
+          test
+        </button>
       </div>
     );
   }
+
   return render;
 };
 
