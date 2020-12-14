@@ -1,6 +1,8 @@
-import React, { Component } from "react";
+import React from "react";
 import "./css/Partner.css";
 import { imageExists } from "./Avatar";
+import VideoChat from '../Components/VideoRelated/VideoChat'
+
 const Partner = (props) => {
   const urlDefault =
     "https://www.pphfoundation.ca/wp-content/uploads/2018/05/default-avatar.png";
@@ -19,6 +21,10 @@ const Partner = (props) => {
           <b>{props.guest.Fullname}</b>
         </p>
       </div>
+      <div className="callButton">
+      <VideoChat  dataFromPartnerToVideoChat = { props.guest}   />
+      </div>
+      
     </div>
   );
 };

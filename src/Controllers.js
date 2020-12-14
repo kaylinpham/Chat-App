@@ -92,3 +92,6 @@ export async function getLastMessages(rooms) {
   });
   return lastMessages;
 }
+
+
+

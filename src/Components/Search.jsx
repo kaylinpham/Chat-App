@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import "./css/Search.css";
 const Search = (props) => {
   return (

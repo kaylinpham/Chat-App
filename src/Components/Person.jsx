@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Avatar from "./Avatar";
 import "./css/Person.css";
 import Quickview from "./Quickview";
-import { db } from "../App";
+
 class Person extends Component {
   constructor(props) {
     super(props);
