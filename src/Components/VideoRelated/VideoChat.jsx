@@ -12,18 +12,15 @@ const VideoChat = (props) => {
   const [token, setToken] = useState(null);
 
   useEffect(() => {
-    console.log(userVideoChat)
-    console.log(userVideoChatID)
-    console.log(roomNameVideo)
-    console.log(targetVideoChatID)
-  }, [userVideoChat,userVideoChatID,roomNameVideo,targetVideoChatID]);
+    console.log(userVideoChat);
+    console.log(userVideoChatID);
+    console.log(roomNameVideo);
+    console.log(targetVideoChatID);
+  }, [userVideoChat, userVideoChatID, roomNameVideo, targetVideoChatID]);
 
- 
   useEffect(() => {
     setTargetVideoChatID(props.dataFromPartnerToVideoChat.ID);
   }, [props.dataFromPartnerToVideoChat.ID]);
-  
-  
 
   useEffect(() => {
     let usernameLocal = JSON.parse(window.localStorage.getItem("user"))
@@ -31,10 +28,7 @@ const VideoChat = (props) => {
     let userIDLocal = JSON.parse(window.localStorage.getItem("user")).ID;
     setUserVideoChat(usernameLocal);
     setUserVideoChatID(userIDLocal);
-   
   }, []);
-
-  
 
   const handleSubmit = useCallback(
     async (event) => {
@@ -42,14 +36,15 @@ const VideoChat = (props) => {
         let idRoom = await db
           .collection("randomRoomId")
           .add({
-            tempVideoRoom:userVideoChat,
+            tempVideoRoom: userVideoChat,
           })
           .then((DocRef) => {
             return DocRef.id;
           });
-          setRoomNameVideo(idRoom);
-          console.log(props.dataFromPartnerToVideoChat.ID)  
-          console.log(targetVideoChatID)
+        console.log(idRoom);
+        setRoomNameVideo(idRoom);
+        // console.log(props.dataFromPartnerToVideoChat.ID);
+        // console.log(targetVideoChatID);
         const data = await fetch("/video/token", {
           method: "POST",
           body: JSON.stringify({
@@ -67,12 +62,16 @@ const VideoChat = (props) => {
     },
     [roomNameVideo, userVideoChat]
   );
- 
+
   const handleSubmit2 = useCallback(
     async (event) => {
       try {
-        let a = db.collection("users").doc(userVideoChatID).get().then( doc => doc.data().roomId)
-        
+        let a = db
+          .collection("users")
+          .doc(userVideoChatID)
+          .get()
+          .then((doc) => doc.data().roomId);
+
         const data = await fetch("/video/token", {
           method: "POST",
           body: JSON.stringify({
@@ -91,22 +90,24 @@ const VideoChat = (props) => {
     [roomNameVideo, userVideoChat]
   );
 
-const handleSubmit3 = () => {
-  db.collection("users").doc(targetVideoChatID).set({
-    calling: true,
-    roomId:roomNameVideo,
-  },{merge:true})
-}
+  const handleSubmit3 = () => {
+    db.collection("users").doc(targetVideoChatID).set(
+      {
+        calling: true,
+        roomId: roomNameVideo,
+      },
+      { merge: true }
+    );
+  };
 
   const handleLogout = useCallback((event) => {
     setToken(null);
-    console.log(userVideoChatID)
+    console.log(userVideoChatID);
   }, []);
 
- 
   let render;
   if (token) {
-    console.log (roomNameVideo)
+    console.log(roomNameVideo);
     render = (
       <div>
         <button className="callButton" onClick={handleSubmit3}>
@@ -114,12 +115,11 @@ const handleSubmit3 = () => {
         </button>
 
         <Room
-        roomNameVideo={roomNameVideo}
-        token={token}
-        handleLogout={handleLogout}
-      />
+          roomNameVideo={roomNameVideo}
+          token={token}
+          handleLogout={handleLogout}
+        />
       </div>
-     
     );
   } else {
     render = (
@@ -127,12 +127,13 @@ const handleSubmit3 = () => {
         <button className="callButton" onClick={handleSubmit}>
           📹
         </button>
-        
-        <button className="callButton" onClick={handleSubmit2}>test</button>
+
+        <button className="callButton" onClick={handleSubmit2}>
+          test
+        </button>
       </div>
     );
   }
-
 
   return render;
 };
