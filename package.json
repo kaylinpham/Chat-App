@@ -14,7 +14,7 @@
     "react-facebook-login": "^4.1.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.4",
-    "twilio-video": "^2.2.0",
+    "twilio-video": "^2.10.0",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
