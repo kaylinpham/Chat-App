@@ -47,15 +47,15 @@ const Room = ({ roomNameVideo, token, handleLogout }) => {
   const remoteParticipants = participants.map((participant) => (
     <Participant key={participant.sid} participant={participant} />
   ));
-
+  console.log(roomNameVideo)
   return (
     <div className="roomVideo">
       <div className="RoomVideoStatus">
         <h2>ID ROOM: {roomNameVideo}</h2>
+        
         <button className="EndCall" onClick={handleLogout}>END CALL</button>
       </div>
       <div className="RoomVideoMain">
-        <h3>NGƯỜI NHẬN</h3>
         <div className="remote-participants">{remoteParticipants}</div>
 
         <div className="local-participant">

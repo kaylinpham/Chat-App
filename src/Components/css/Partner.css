@@ -7,10 +7,12 @@
   padding: 0.5rem;
   box-sizing: border-box;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 .partner__img-container {
-  width: 4.6%;
+  width: 5.5%;
   height: 100%;
+  background-color: brown;
 }
 .partner__img {
   width: 100%;
@@ -28,3 +30,11 @@
   color: rgb(109, 107, 103);
   font-size: 0.8rem;
 }
+
+
+.callButton {
+  height: 71px;
+  margin-left: 30px;
+
+}
+

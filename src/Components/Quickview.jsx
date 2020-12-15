@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./css/Quickview.css";
-import * as f from "../Controllers";
+
+
 class Quickview extends Component {
   constructor(props) {
     super(props);
@@ -28,6 +29,7 @@ class Quickview extends Component {
           {new Date(
             this.props.room.modifiedDate.seconds * 1000
           ).toLocaleString()}
+         
         </span>
       </div>
     );

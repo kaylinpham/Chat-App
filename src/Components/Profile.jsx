@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import Avatar from "./Avatar";
+import React from "react";
+
 import "./css/Profile.css";
 import { imageExists } from "./Avatar";
 const Profile = (props) => {

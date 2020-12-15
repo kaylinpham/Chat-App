@@ -1,7 +1,6 @@
 .callButton {
     height: 35px;
-    width: 50px;
-    font-size: 35px;
+    font-size: 65px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -11,3 +10,6 @@
     outline: none;
 }
 
+.callButtonMainDiv{
+    display: flex;
+ }
