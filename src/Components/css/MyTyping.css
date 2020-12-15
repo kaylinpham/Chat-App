@@ -20,6 +20,7 @@
 #sympol {
   font-size: 2rem;
   padding-right: 1.5rem;
+  cursor: pointer;
 }
 .typing__area .emoji {
   width: 300px !important;
